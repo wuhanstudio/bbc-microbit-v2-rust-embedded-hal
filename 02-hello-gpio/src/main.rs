@@ -9,7 +9,8 @@ use nrf52833_hal::{gpio, pac};
 
 // Debugging via RTT, no serrial port needed
 use rtt_target::rtt_init_print;
-use rtt_target::rprintln;
+
+// use defmt_rtt as _;
 
 #[entry]
 fn main() -> ! {
@@ -25,11 +26,17 @@ fn main() -> ! {
 
     loop {
         if button_a.is_low().unwrap() {
-            rprintln!("Button A pressed");
+            rtt_target::rprintln!("Button A pressed");
             _col1.set_low().unwrap();
+
+            // DEBUG via defmt
+            // defmt::info!("Button A pressed");
         } else {
-            rprintln!("Button A released");
             _col1.set_high().unwrap();
+            rtt_target::rprintln!("Button A released");
+
+            // DEBUG via defmt
+            // defmt::info!("Button A released");
         }
     }
 }
