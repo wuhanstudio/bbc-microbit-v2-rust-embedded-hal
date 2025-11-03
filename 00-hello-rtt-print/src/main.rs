@@ -1,10 +1,11 @@
 #![no_main]
 #![no_std]
 
-use cortex_m_rt::entry;
-use embedded_hal::delay::DelayNs;
 use panic_halt as _;
 
+use cortex_m_rt::entry;
+
+use embedded_hal::delay::DelayNs;
 use nrf52833_hal::Timer;
 
 // Debugging via RTT, no serrial port needed
