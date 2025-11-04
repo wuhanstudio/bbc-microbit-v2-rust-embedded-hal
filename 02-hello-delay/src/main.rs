@@ -7,7 +7,6 @@ use cortex_m_rt::entry;
 
 use nrf52833_hal::delay::Delay;
 use embedded_hal::delay::DelayNs;
-// use nrf52833_hal::Timer;
 
 // Debugging via RTT, no serrial port needed
 use rtt_target::rtt_init_print;
@@ -17,15 +16,11 @@ use rtt_target::rprintln;
 fn main() -> ! {
     rtt_init_print!();
 
-    // let p = nrf52833_hal::pac::Peripherals::take().unwrap();
     let cp = cortex_m::Peripherals::take().unwrap();
-
-    // let mut timer = Timer::new(p.TIMER0);
     let mut delay = Delay::new(cp.SYST);
 
     loop {
         rprintln!("Hello, world!");
         delay.delay_ms(1000_u32);
-        // timer.delay_ms(1000_u32);
     }
 }

@@ -1,17 +1,19 @@
 #![no_main]
 #![no_std]
 
-use cortex_m_rt::entry;
 use panic_halt as _;
+
+use cortex_m_rt::entry;
 
 use nrf52833_hal as hal;
 
 use fugit::ExtU64;
-use rtt_target::{rprintln, rtt_init_print};
 
 mod timer;
 use crate::timer::Timer;
 use crate::timer::ticker::Ticker;
+
+use rtt_target::{rprintln, rtt_init_print};
 
 #[entry]
 fn main() -> ! {

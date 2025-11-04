@@ -1,10 +1,11 @@
 #![no_main]
 #![no_std]
 
-use cortex_m_rt::entry;
-use embedded_hal::digital::{InputPin, OutputPin};
 use panic_halt as _;
 
+use cortex_m_rt::entry;
+
+use embedded_hal::digital::{InputPin, OutputPin};
 use nrf52833_hal::{gpio, pac};
 
 // Debugging via RTT, no serrial port needed
