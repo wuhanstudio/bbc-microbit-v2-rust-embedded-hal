@@ -130,17 +130,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a21dea9854beb860f3062d10228ce9b976da520a73474aed3171ec276bc0c032"
 
 [[package]]
-name = "embedded-timers"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0b13fd4109a4b9b49b1c747c64b2d813f33639b723e2c3b7b36190edd051bc06"
-dependencies = [
- "embedded-hal 1.0.0",
- "nb 1.1.0",
- "void",
-]
-
-[[package]]
 name = "fixed"
 version = "1.29.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -182,13 +171,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "hello-rtt-print"
+name = "hello-delay"
 version = "0.1.0"
 dependencies = [
  "cortex-m",
  "cortex-m-rt",
  "embedded-hal 1.0.0",
- "embedded-timers",
  "nrf52833-hal",
  "panic-halt",
  "rtt-target",
