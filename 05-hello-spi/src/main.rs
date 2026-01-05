@@ -12,6 +12,13 @@ use nrf52833_hal::{gpio, pac};
 // use ssd1306::I2CDisplayInterface;
 
 // SPI
+// MOSI - P0.13
+// MISO - P0.01
+// SCK  - P0.17
+// CS   - P1.02
+
+// DC   - P0.09
+// RST  - P0.10
 use nrf52833_hal::spim::Spim;
 
 // Delay
@@ -60,8 +67,8 @@ fn main() -> ! {
     );
 
     let cs = p1.p1_02.into_push_pull_output(gpio::Level::High).degrade();
-    let mut rst = p0.p0_10.into_push_pull_output(gpio::Level::Low).degrade();
     let dc = p0.p0_09.into_push_pull_output(gpio::Level::High).degrade();
+    let mut rst = p0.p0_10.into_push_pull_output(gpio::Level::Low).degrade();
 
     let interface = SPIInterface::new(spi, dc, cs);
     let mut display = Ssd1306::new(interface, DisplaySize128x64, DisplayRotation::Rotate0)
