@@ -1,4 +1,4 @@
-pub mod ticker;
+use crate::ticker;
 
 pub struct Timer<'a> {
     end_time: ticker::TickInstant,
