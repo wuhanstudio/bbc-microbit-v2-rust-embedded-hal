@@ -24,10 +24,12 @@ fn main() -> ! {
     let ticker = Ticker::new(p.RTC0);
     let mut timer = Timer::new(1000.millis(), &ticker);
 
+    let mut i = 1;
     loop {
         if timer.is_ready() {
-            rprintln!("Hello, world!");
+            rprintln!("[{}] Hello, world! Time: {}", i, ticker.now());
             timer = Timer::new(1000.millis(), &ticker);
+            i = i + 1;
         }
     }
 }
