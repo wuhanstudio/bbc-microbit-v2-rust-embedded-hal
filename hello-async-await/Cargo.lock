@@ -414,7 +414,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "hello-async"
+name = "hello-async-await"
 version = "0.1.0"
 dependencies = [
  "cortex-m",
