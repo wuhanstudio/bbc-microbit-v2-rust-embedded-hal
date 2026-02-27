@@ -46,20 +46,22 @@ impl Blinky {
     #[action]
     fn enter_led_on(&mut self) {
         rprintln!("LED ON");
+        self.timer = Timer::new(1000.millis());
     }
 
     #[action]
     fn exit_led_on(&mut self) {
-        self.timer = Timer::new(1000.millis());
+        rprintln!("Switching to LED Off");
     }
 
     #[action]
     fn enter_led_off(&mut self) {
         rprintln!("LED OFF");
+        self.timer = Timer::new(1000.millis());
     }
 
     #[action]
     fn exit_led_off(&mut self) {
-        self.timer = Timer::new(1000.millis());
+        rprintln!("Switching to LED On");
     }
 }
