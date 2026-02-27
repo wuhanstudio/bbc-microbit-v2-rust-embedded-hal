@@ -3,6 +3,7 @@
 use statig::prelude::*;
 
 use fugit::ExtU64;
+use crate::ticker::Ticker;
 use crate::timer::Timer;
 
 use rtt_target::rprintln;
@@ -63,5 +64,13 @@ impl Blinky {
     #[action]
     fn exit_led_off(&mut self) {
         rprintln!("Switching to LED On");
+    }
+}
+
+pub fn blinky_poll(blinky_task: &mut InitializedStateMachine<Blinky>) {
+    if blinky_task.timer.is_ready() {
+        let time = Ticker::now();
+        rprintln!("Blinky Event triggered at {} ticks, {} ms", time.ticks(), time.duration_since_epoch().to_millis());
+        blinky_task.handle(&Event::TimerElapsed);
     }
 }

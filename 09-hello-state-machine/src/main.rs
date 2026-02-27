@@ -14,7 +14,7 @@ use crate::ticker::Ticker;
 
 pub mod blinky;
 use crate::blinky::Blinky;
-use crate::blinky::Event;
+use crate::blinky::blinky_poll;
 
 use statig::prelude::*;
 
@@ -31,14 +31,10 @@ fn main() -> ! {
     let mut cp = hal::pac::CorePeripherals::take().unwrap();
 
     Ticker::init(p.RTC0, &mut cp.NVIC);
-    let mut blinky_task = Blinky::default().uninitialized_state_machine().init();
+    let mut blinky_task: InitializedStateMachine<Blinky> = Blinky::default().uninitialized_state_machine().init();
 
     rprintln!("Waiting for events at {} ms", Ticker::now().duration_since_epoch().to_millis());
     loop {
-        if blinky_task.timer.is_ready() {
-            let time = Ticker::now();
-            rprintln!("Blinky Event triggered at {} ticks, {} ms", time.ticks(), time.duration_since_epoch().to_millis());
-            blinky_task.handle(&Event::TimerElapsed);
-        }
+        blinky_poll(&mut blinky_task);
     }
 }
