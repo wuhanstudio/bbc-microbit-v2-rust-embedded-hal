@@ -11,6 +11,9 @@ pub mod ticker;
 pub mod timer;
 
 use crate::ticker::Ticker;
+use crate::timer::delay;
+
+use fugit::ExtU64;
 
 pub mod blinky;
 use crate::blinky::Blinky;
@@ -50,6 +53,13 @@ async fn task_1() {
     }
 }
 
+async fn task_2() {
+    loop {
+        delay(100.millis()).await;
+        rprintln!("[task_2] Hello World");
+    }
+}
+
 #[entry]
 fn main() -> ! {
     rtt_init_print!();
@@ -69,11 +79,13 @@ fn main() -> ! {
 
     let t1 = core::pin::pin!(task_1());
     let mut cm = Cassette::new(t1);
+    
+    let t2 = core::pin::pin!(task_2());
+    let mut cm2 = Cassette::new(t2);
 
     loop {
-        if let Some(x) = cm.poll_on() {
-            rprintln!("Done!: `{:?}`", x);
-        }
+        cm.poll_on();
+        cm2.poll_on();
         blinky_poll(&mut blinky_task);
     }
 }
