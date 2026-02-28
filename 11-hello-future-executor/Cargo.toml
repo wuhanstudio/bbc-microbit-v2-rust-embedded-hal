@@ -16,3 +16,6 @@ rtt-target = "0.6.1"
 critical-section = "1.2.0"
 statig = "0.4.1"
 cassette = "0.3.0"
+
+[features]
+trigger-overflow = []

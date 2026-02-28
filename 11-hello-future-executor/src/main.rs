@@ -11,6 +11,9 @@ pub mod ticker;
 pub mod timer;
 
 use crate::ticker::Ticker;
+use crate::timer::delay;
+
+use fugit::ExtU64;
 
 // pub mod blinky;
 // use crate::blinky::Blinky;
@@ -51,14 +54,12 @@ async fn task_1() {
     }
 }
 
-// async fn led_task() {
-//     let mut blinky_task: InitializedStateMachine<Blinky> = Blinky::default().uninitialized_state_machine().init();
-//     rprintln!("Waiting for events at {} ms", Ticker::now().duration_since_epoch().to_millis());
-
-//     loop {
-//         blinky_poll(&mut blinky_task);
-//     }
-// }
+async fn task_2() {
+    loop {
+        delay(100.millis()).await;
+        rprintln!("[task_2] Hello World");
+    }
+}
 
 #[entry]
 fn main() -> ! {
@@ -75,5 +76,6 @@ fn main() -> ! {
     Ticker::init(p.RTC0, &mut cp.NVIC);
 
     let t1 = core::pin::pin!(task_1());
-    executor::run_tasks(&mut [t1]);
+    let t2 = core::pin::pin!(task_2());
+    executor::run_tasks(&mut [t1, t2]);
 }
