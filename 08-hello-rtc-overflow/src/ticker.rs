@@ -65,5 +65,9 @@ fn RTC0() {
             rtc.reset_event(RtcInterrupt::Overflow);
             TICKER.ovf_count.fetch_add(1, Ordering::Relaxed);
         }
+
+        // See nrf52833 datasheet, section 6.1.8 "RTC event handling and latency":
+        let _ = rtc.is_event_triggered(RtcInterrupt::Overflow);
+    });
     });
 }
