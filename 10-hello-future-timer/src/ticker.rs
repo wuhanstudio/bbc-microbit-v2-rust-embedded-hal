@@ -29,11 +29,9 @@ impl Ticker {
         let mut rtc = Rtc::new(rtc0, 0).unwrap();
         rtc.enable_counter();
 
-        rtc.trigger_overflow();
-        while rtc.get_counter() == 0 {};
-
         rtc.enable_event(RtcInterrupt::Overflow);
         rtc.enable_interrupt(RtcInterrupt::Overflow, Some(nvic));
+
         critical_section::with(|cs| {
             TICKER.rtc.replace(cs, Some(rtc));
         });
