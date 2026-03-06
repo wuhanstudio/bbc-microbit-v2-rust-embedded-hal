@@ -21,6 +21,10 @@ fn main() -> ! {
 
     let p = hal::pac::Peripherals::take().unwrap();
 
+    // Enable the low-power/low-frequency clock which is required by the RTC.
+    let clocks = hal::clocks::Clocks::new(p.CLOCK);
+    let _ = clocks.start_lfclk();
+
     let ticker = Ticker::new(p.RTC0);
     let mut timer = Timer::new(1000.millis(), &ticker);
 
