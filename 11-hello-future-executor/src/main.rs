@@ -56,7 +56,7 @@ async fn task_1() {
 
 async fn task_2() {
     loop {
-        delay(100.millis()).await;
+        delay(2000.millis()).await;
         rprintln!("[task_2] Hello World");
     }
 }
