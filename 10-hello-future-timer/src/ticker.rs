@@ -62,9 +62,14 @@ fn RTC0() {
     critical_section::with(|cs| {
         let mut rm_rtc = TICKER.rtc.borrow_ref_mut(cs);
         let rtc = rm_rtc.as_mut().unwrap();
+        
         if rtc.is_event_triggered(RtcInterrupt::Overflow) {
             rtc.reset_event(RtcInterrupt::Overflow);
             TICKER.ovf_count.fetch_add(1, Ordering::Relaxed);
         }
+
+        // See nrf52833 datasheet, section 6.1.8 "RTC event handling and latency":
+        let _ = rtc.is_event_triggered(RtcInterrupt::Overflow);
+    });
     });
 }
