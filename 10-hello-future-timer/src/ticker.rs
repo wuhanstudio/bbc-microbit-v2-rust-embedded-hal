@@ -69,5 +69,4 @@ fn RTC0() {
         // See nrf52833 datasheet, section 6.1.8 "RTC event handling and latency":
         let _ = rtc.is_event_triggered(RtcInterrupt::Overflow);
     });
-    });
 }
