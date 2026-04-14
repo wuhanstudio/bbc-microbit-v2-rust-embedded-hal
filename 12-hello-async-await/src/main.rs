@@ -6,6 +6,7 @@ use rtt_target::{rprintln, rtt_init_print};
 
 use embassy_time::Timer;
 use embassy_executor::Spawner;
+use embassy_nrf::gpio;
 
 use core::pin::Pin;
 use core::task::Poll;
@@ -48,12 +49,50 @@ async fn task_2() {
     }
 }
 
+#[embassy_executor::task]
+async fn task_led(mut rows: [gpio::Output<'static>; 5], mut cols: [gpio::Output<'static>; 5]) {
+    loop {
+        // Led On
+        for row in rows.iter_mut() {
+            row.set_high();
+        }
+        for col in cols.iter_mut() {
+            col.set_low();
+        }
+        Timer::after_millis(1000).await;
+
+        // Led Off
+        for row in rows.iter_mut() {
+            row.set_high();
+        }
+        for col in cols.iter_mut() {
+            col.set_high();
+        }
+        Timer::after_millis(1000).await;
+    }
+}
+
 #[embassy_executor::main]
 async fn main(spawner: Spawner) {
     rtt_init_print!();
 
-    let _p = embassy_nrf::init(Default::default());
+    let p = embassy_nrf::init(Default::default());
+
+    let r1 = gpio::Output::new(p.P0_21, gpio::Level::Low, gpio::OutputDrive::Standard);
+    let r2 = gpio::Output::new(p.P0_22, gpio::Level::High, gpio::OutputDrive::Standard);
+    let r3 = gpio::Output::new(p.P0_15, gpio::Level::High, gpio::OutputDrive::Standard);
+    let r4 = gpio::Output::new(p.P0_24, gpio::Level::High, gpio::OutputDrive::Standard);
+    let r5 = gpio::Output::new(p.P0_19, gpio::Level::High, gpio::OutputDrive::Standard);
+    let rows = [r1, r2, r3, r4, r5];
+
+    let c1 = gpio::Output::new(p.P0_28, gpio::Level::Low, gpio::OutputDrive::Standard);
+    let c2 = gpio::Output::new(p.P0_11, gpio::Level::Low, gpio::OutputDrive::Standard);
+    let c3 = gpio::Output::new(p.P0_31, gpio::Level::Low, gpio::OutputDrive::Standard);
+    let c4 = gpio::Output::new(p.P1_05, gpio::Level::Low, gpio::OutputDrive::Standard);
+    let c5 = gpio::Output::new(p.P0_30, gpio::Level::Low, gpio::OutputDrive::Standard);
+    let cols = [c1, c2, c3, c4, c5];
 
     spawner.spawn(task_1()).unwrap();
     spawner.spawn(task_2()).unwrap();
+    spawner.spawn(task_led(rows, cols)).unwrap();
 }
