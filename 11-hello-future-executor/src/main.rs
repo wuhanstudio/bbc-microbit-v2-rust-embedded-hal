@@ -4,6 +4,8 @@
 use panic_halt as _;
 use cortex_m_rt::entry;
 use nrf52833_hal as hal;
+use nrf52833_hal::gpio;
+use embedded_hal::digital::OutputPin;
 
 use rtt_target::{rprintln, rtt_init_print};
 
@@ -14,12 +16,6 @@ use crate::ticker::Ticker;
 use crate::timer::delay;
 
 use fugit::ExtU64;
-
-// pub mod blinky;
-// use crate::blinky::Blinky;
-// use crate::blinky::blinky_poll;
-
-// use statig::prelude::*;
 
 use core::pin::Pin;
 use core::task::Poll;
@@ -61,6 +57,30 @@ async fn task_2() {
     }
 }
 
+async fn task_led<P: OutputPin, const N: usize>(mut rows: [P; N], mut cols: [P; N]) {
+    loop {
+        // LED ON
+        for row in rows.iter_mut() {
+            row.set_high().unwrap();
+        }
+
+        for col in cols.iter_mut() {
+            col.set_low().unwrap();
+        }
+        delay(1000.millis()).await;
+
+        // LED Off
+        for row in rows.iter_mut() {
+            row.set_high().unwrap();
+        }
+
+        for col in cols.iter_mut() {
+            col.set_high().unwrap();
+        }
+        delay(1000.millis()).await;
+    }
+}
+
 #[entry]
 fn main() -> ! {
     rtt_init_print!();
@@ -72,10 +92,27 @@ fn main() -> ! {
     clocks.start_lfclk();
 
     let mut cp = hal::pac::CorePeripherals::take().unwrap();
+    let p0 = gpio::p0::Parts::new(p.P0);
+    let p1 = gpio::p1::Parts::new(p.P1);
+
+    let r1 = p0.p0_21.into_push_pull_output(gpio::Level::High).degrade();
+    let r2 = p0.p0_22.into_push_pull_output(gpio::Level::High).degrade();
+    let r3 = p0.p0_15.into_push_pull_output(gpio::Level::High).degrade();
+    let r4 = p0.p0_24.into_push_pull_output(gpio::Level::High).degrade();
+    let r5 = p0.p0_19.into_push_pull_output(gpio::Level::High).degrade();
+    let rows = [r1, r2, r3, r4, r5];
+
+    let c1 = p0.p0_28.into_push_pull_output(gpio::Level::Low).degrade();
+    let c2: gpio::Pin<gpio::Output<gpio::PushPull>> = p0.p0_11.into_push_pull_output(gpio::Level::Low).degrade();
+    let c3: gpio::Pin<gpio::Output<gpio::PushPull>> = p0.p0_31.into_push_pull_output(gpio::Level::Low).degrade();
+    let c4: gpio::Pin<gpio::Output<gpio::PushPull>> = p1.p1_05.into_push_pull_output(gpio::Level::Low).degrade();
+    let c5: gpio::Pin<gpio::Output<gpio::PushPull>> = p0.p0_30.into_push_pull_output(gpio::Level::Low).degrade();
+    let cols = [c1, c2, c3, c4, c5];
 
     Ticker::init(p.RTC0, &mut cp.NVIC);
 
     let t1 = core::pin::pin!(task_1());
     let t2 = core::pin::pin!(task_2());
-    executor::run_tasks(&mut [t1, t2]);
+    let t3 = core::pin::pin!(task_led(rows, cols));
+    executor::run_tasks(&mut [t1, t2, t3]);
 }
