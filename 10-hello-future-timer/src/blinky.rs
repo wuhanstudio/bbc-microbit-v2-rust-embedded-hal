@@ -51,7 +51,7 @@ impl<P: OutputPin, const N: usize> Blinky<P, N> {
 
     #[action]
     fn enter_led_on(&mut self) {
-        rprintln!("LED ON");
+        // rprintln!("LED ON");
         for row in self.rows.iter_mut() {
             row.set_high().unwrap();
         }
@@ -69,7 +69,7 @@ impl<P: OutputPin, const N: usize> Blinky<P, N> {
 
     #[action]
     fn enter_led_off(&mut self) {
-        rprintln!("LED OFF");
+        // rprintln!("LED OFF");
         for row in self.rows.iter_mut() {
             row.set_high().unwrap();
         }

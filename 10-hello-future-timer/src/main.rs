@@ -30,6 +30,7 @@ use core::sync::atomic::{AtomicU32, Ordering};
 
 static TICKS: AtomicU32 = AtomicU32::new(0);
 
+// #[derive(Clone, Copy)]
 struct CountFuture;
 
 impl Future for CountFuture {
@@ -58,7 +59,7 @@ async fn task_1() {
 
 async fn task_2() {
     loop {
-        delay(100.millis()).await;
+        delay(2000.millis()).await;
         rprintln!("[task_2] Hello World");
     }
 }
