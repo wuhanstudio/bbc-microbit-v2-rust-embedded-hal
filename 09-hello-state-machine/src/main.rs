@@ -6,17 +6,22 @@ use cortex_m_rt::entry;
 
 use nrf52833_hal as hal;
 use nrf52833_hal::gpio;
+use nrf52833_hal::uarte;
 
 use rtt_target::{rprintln, rtt_init_print};
 
 pub mod ticker;
-pub mod timer;
-
 use crate::ticker::Ticker;
+
+pub mod timer;
 
 pub mod blinky;
 use crate::blinky::Blinky;
 use crate::blinky::blinky_poll;
+
+pub mod hello;
+use crate::hello::Hello;
+use crate::hello::hello_poll;
 
 use statig::prelude::*;
 
@@ -51,8 +56,29 @@ fn main() -> ! {
     Ticker::init(p.RTC0, &mut cp.NVIC);
     let mut blinky_task: InitializedStateMachine<Blinky<_, 5>> = Blinky::new(rows, cols).uninitialized_state_machine().init();
 
+    let (uart0, cdc_pins) = {
+        (
+            p.UARTE0,
+            uarte::Pins {
+                txd: p0.p0_06.into_push_pull_output(gpio::Level::High).degrade(),
+                rxd: p1.p1_08.into_floating_input().degrade(),
+                cts: None,
+                rts: None,
+            },
+        )
+    };
+
+    let uarte = uarte::Uarte::new(
+        uart0,
+        cdc_pins,
+        uarte::Parity::EXCLUDED,
+        uarte::Baudrate::BAUD115200,
+    );
+
+    let mut hello_task: InitializedStateMachine<Hello> = Hello::new(uarte).uninitialized_state_machine().init();
     rprintln!("Waiting for events at {} ms", Ticker::now().duration_since_epoch().to_millis());
     loop {
         blinky_poll(&mut blinky_task);
+        hello_poll(&mut hello_task);
     }
 }

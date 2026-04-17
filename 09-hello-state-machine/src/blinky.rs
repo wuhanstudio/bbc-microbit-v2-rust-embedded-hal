@@ -12,9 +12,9 @@ use embedded_hal::digital::{InputPin, OutputPin};
 // #[derive(Default)]
 pub struct Blinky<P: OutputPin, const N: usize>
 {
-    pub timer: Timer,
-    pub rows: [P; N],
-    pub cols: [P; N],
+    timer: Timer,
+    rows: [P; N],
+    cols: [P; N],
 }
 
 impl<P: OutputPin, const N: usize> Blinky<P, N> {
