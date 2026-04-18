@@ -106,10 +106,10 @@ fn main() -> ! {
     let rows = [r1, r2, r3, r4, r5];
 
     let c1 = p0.p0_28.into_push_pull_output(gpio::Level::Low).degrade();
-    let c2: gpio::Pin<gpio::Output<gpio::PushPull>> = p0.p0_11.into_push_pull_output(gpio::Level::Low).degrade();
-    let c3: gpio::Pin<gpio::Output<gpio::PushPull>> = p0.p0_31.into_push_pull_output(gpio::Level::Low).degrade();
-    let c4: gpio::Pin<gpio::Output<gpio::PushPull>> = p1.p1_05.into_push_pull_output(gpio::Level::Low).degrade();
-    let c5: gpio::Pin<gpio::Output<gpio::PushPull>> = p0.p0_30.into_push_pull_output(gpio::Level::Low).degrade();
+    let c2 = p0.p0_11.into_push_pull_output(gpio::Level::Low).degrade();
+    let c3 = p0.p0_31.into_push_pull_output(gpio::Level::Low).degrade();
+    let c4 = p1.p1_05.into_push_pull_output(gpio::Level::Low).degrade();
+    let c5 = p0.p0_30.into_push_pull_output(gpio::Level::Low).degrade();
     let cols = [c1, c2, c3, c4, c5];
 
     Ticker::init(p.RTC0, &mut cp.NVIC);
