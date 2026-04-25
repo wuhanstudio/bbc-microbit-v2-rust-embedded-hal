@@ -12,7 +12,7 @@
 
 | Module                |                      BiliBili                       |                                                                                             YouTube | Code                                                                                                |
 | :-------------------- | :-------------------------------------------------: | --------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------- |
-| Overview              | [Link](https://www.bilibili.com/video/BV1fu4WzmECd) | [Link](https://www.youtube.com/watch?v=WTXYgtFgWV8&list=PLlRCv8NaDaU8XxW7s7M4qfnb-dzwu5Qs9&index=1) | NA                                                                                                   |
+| Overview              | [Link](https://www.bilibili.com/video/BV1fu4WzmECd) | [Link](https://www.youtube.com/watch?v=WTXYgtFgWV8&list=PLlRCv8NaDaU8XxW7s7M4qfnb-dzwu5Qs9&index=1) | N/A                                                                                                   |
 | RTT Print             | [Link](https://www.bilibili.com/video/BV1xGsMzCEUh) | [Link](https://www.youtube.com/watch?v=n-cmjDTjK5Y&list=PLlRCv8NaDaU8XxW7s7M4qfnb-dzwu5Qs9&index=2) | [00-hello-rtt-print](00-hello-rtt-print/)                                                           |
 | Defmt Print           | [Link](https://www.bilibili.com/video/BV1xGsMzCEUh) | [Link](https://www.youtube.com/watch?v=n-cmjDTjK5Y&list=PLlRCv8NaDaU8XxW7s7M4qfnb-dzwu5Qs9&index=2) | [01-hello-defmt-rtt](01-hello-defmt-rtt/) |
 | HAL (Delay)           |                        [Link](https://www.bilibili.com/video/BV1dM2aBFEKh)                         |                                                                                            [Link](https://www.youtube.com/watch?v=LIeYggkQD_E&list=PLlRCv8NaDaU8XxW7s7M4qfnb-dzwu5Qs9&index=3) | [02-hello-delay](02-hello-delay/)                                                                   |
@@ -27,7 +27,7 @@
 | Async (Executor)      |                        Coming Soon                         |                                                                                            Coming Soon | [11-hello-future-executor](11-hello-future-executor/)                                               |
 | Async (Waker)         |                        Coming Soon                         |                                                                                            Coming Soon | [12-hello-waker](12-hello-waker/)                                              |
 | Async (Await)         |                        Coming Soon                         |                                                                                            Coming Soon | [13-hello-async-await](13-hello-async-await/)                                                       |
-| Conclusion         |                        Coming Soon                         |                                                                                            Coming Soon | NA                                                       |
+| Conclusion         |                        Coming Soon                         |                                                                                            Coming Soon | N/A                                                       |
 
 ## Prerequisites
 
