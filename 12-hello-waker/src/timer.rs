@@ -2,15 +2,11 @@ use core::pin::Pin;
 use core::task::Poll;
 use core::task::Context;
 
-use rtt_target::rprint;
-
 use crate::ticker::Ticker;
 use crate::ticker::TickDuration;
 use crate::ticker::TickInstant;
 use crate::ticker::TimerEntry;
 use crate::ticker::TIMERS;
-
-use rtt_target::rprintln;
 
 pub struct Timer {
     deadline: TickInstant,

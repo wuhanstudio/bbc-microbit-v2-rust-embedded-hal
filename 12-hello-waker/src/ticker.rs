@@ -16,7 +16,6 @@ pub type TickInstant = Instant<u64, 1, 32_768>; // 32.768 kHz clock
 pub type TickDuration = Duration<u64, 1, 32_768>; // 32.768 kHz clock
 
 use heapless::Vec;
-use rtt_target::rprintln;
 use core::task::Waker;
 
 const MAX_TIMERS: usize = 8;
@@ -41,15 +40,11 @@ pub struct Ticker {
 
 impl Ticker {
     pub fn init(rtc0: RTC0, nvic: &mut NVIC) {
-        rprintln!("Interrupt Enabling");
-
         let mut rtc = Rtc::new(rtc0, 0).unwrap();
         rtc.enable_counter();
 
         rtc.enable_event(RtcInterrupt::Overflow);
         rtc.enable_interrupt(RtcInterrupt::Overflow, Some(nvic));
-
-        rprintln!("Interrupt Enabled");
 
         critical_section::with(|cs| {
             TICKER.rtc.replace(cs, Some(rtc));
@@ -79,7 +74,7 @@ impl Ticker {
             let mut rtc_ref = TICKER.rtc.borrow_ref_mut(cs);
             let rtc = rtc_ref.as_mut().unwrap();
 
-            rprintln!("Now {}, Register {}", now, deadline);
+            // rprintln!("Now {}, Register {}", now, deadline);
 
             let ticks = if deadline <= now {
                 now.ticks() + 1
@@ -100,15 +95,16 @@ impl Ticker {
 // Handle RTC0 interrupt
 fn RTC0() {
     let now = Ticker::now();
-    rprintln!("RTC Triggered at {}", now.duration_since_epoch().to_millis());
+    // rprintln!("RTC Triggered at {}", now.duration_since_epoch().to_millis());
+
+    let mut next_deadline = None;
     critical_section::with(|cs| {
         let mut rm_rtc = TICKER.rtc.borrow_ref_mut(cs);
         let rtc = rm_rtc.as_mut().unwrap();
 
         if rtc.is_event_triggered(RtcInterrupt::Compare0) {
             rtc.reset_event(RtcInterrupt::Compare0);
-
-            let timers = &mut *TIMERS.borrow_ref_mut(cs);
+                let timers = &mut *TIMERS.borrow_ref_mut(cs);
 
             let mut i = 0;
             while i < timers.len() {
@@ -120,17 +116,18 @@ fn RTC0() {
                 }
             }
 
-            // 🔥 schedule next compare
-            if let Some(next) = timers.iter().map(|t| t.deadline).min() {
-                Ticker::set_compare(next);
-            }
+            // Schedule next compare
+            next_deadline = timers.iter().map(|t| t.deadline).min();
         }
 
         if rtc.is_event_triggered(RtcInterrupt::Overflow) {
             rtc.reset_event(RtcInterrupt::Overflow);
             TICKER.ovf_count.fetch_add(1, Ordering::Relaxed);
         }
-
         let _ = rtc.is_event_triggered(RtcInterrupt::Overflow);
     });
+
+    if let Some(next) = next_deadline {
+        Ticker::set_compare(next);
+    }
 }

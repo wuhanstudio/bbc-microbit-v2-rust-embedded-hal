@@ -122,10 +122,10 @@ fn main() -> ! {
         ready: AtomicBool::new(true),
     };
 
-    // let t3 = Task {
-    //     future: pin!(task_led(rows, cols)),
-    //     ready: AtomicBool::new(true),
-    // };
+    let t3 = Task {
+        future: pin!(task_led(rows, cols)),
+        ready: AtomicBool::new(true),
+    };
 
-    executor::run_tasks(&mut [t1, t2]);
+    executor::run_tasks(&mut [t1, t2, t3]);
 }
