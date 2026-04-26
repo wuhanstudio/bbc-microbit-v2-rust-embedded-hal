@@ -12,7 +12,6 @@ use fugit::ExtU64;
 use rtt_target::{rprintln, rtt_init_print};
 
 use core::future::Future;
-use core::slice::RSplitMut;
 use core::task::{Context, Poll};
 use core::sync::atomic::{AtomicU32, AtomicBool, Ordering};
 use core::pin::Pin;

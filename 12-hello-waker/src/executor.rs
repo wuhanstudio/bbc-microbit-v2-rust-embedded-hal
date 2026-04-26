@@ -17,13 +17,17 @@ fn task_waker(task: *const Task) -> Waker {
     }
 
     unsafe fn wake(data: *const ()) {
-        let task = &*(data as *const Task);
-        task.ready.store(true, Ordering::Release);
+        unsafe {
+            let task = &*(data as *const Task);
+            task.ready.store(true, Ordering::Release);
+        }
         cortex_m::asm::sev(); // wake CPU
     }
 
     unsafe fn wake_by_ref(data: *const ()) {
-        wake(data);
+        unsafe {
+            wake(data);
+        }
     }
 
     unsafe fn drop(_: *const ()) {}
