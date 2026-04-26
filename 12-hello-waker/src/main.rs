@@ -12,6 +12,7 @@ use fugit::ExtU64;
 use rtt_target::{rprintln, rtt_init_print};
 
 use core::future::Future;
+use core::slice::RSplitMut;
 use core::task::{Context, Poll};
 use core::sync::atomic::{AtomicU32, AtomicBool, Ordering};
 use core::pin::Pin;
@@ -121,10 +122,10 @@ fn main() -> ! {
         ready: AtomicBool::new(true),
     };
 
-    let t3 = Task {
-        future: pin!(task_led(rows, cols)),
-        ready: AtomicBool::new(true),
-    };
+    // let t3 = Task {
+    //     future: pin!(task_led(rows, cols)),
+    //     ready: AtomicBool::new(true),
+    // };
 
-    executor::run_tasks(&mut [t1, t2, t3]);
+    executor::run_tasks(&mut [t1, t2]);
 }

@@ -193,7 +193,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "hello-future-executor"
+name = "hello-waker"
 version = "0.1.0"
 dependencies = [
  "cassette",

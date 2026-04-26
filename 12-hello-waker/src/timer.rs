@@ -2,11 +2,15 @@ use core::pin::Pin;
 use core::task::Poll;
 use core::task::Context;
 
+use rtt_target::rprint;
+
 use crate::ticker::Ticker;
 use crate::ticker::TickDuration;
 use crate::ticker::TickInstant;
 use crate::ticker::TimerEntry;
 use crate::ticker::TIMERS;
+
+use rtt_target::rprintln;
 
 pub struct Timer {
     deadline: TickInstant,
@@ -30,16 +34,22 @@ impl Future for Timer {
             return Poll::Ready(());
         }
 
+        let mut next_deadline = None;
         if !self.registered {
             critical_section::with(|cs| {
-                TIMERS.borrow_ref_mut(cs)
-                    .push(TimerEntry {
-                        deadline: self.deadline,
-                        waker: cx.waker().clone(),
-                    })
-                    .ok();
+                TIMERS.borrow_ref_mut(cs).push(TimerEntry {
+                    deadline: self.deadline,
+                    waker: cx.waker().clone(),
+                })
+                .ok();
+
+                // Find earliest deadline
+                next_deadline = TIMERS.borrow_ref_mut(cs).iter().map(|t| t.deadline).min();
             });
 
+            if let Some(next) = next_deadline {
+                Ticker::set_compare(next);
+            }
             self.registered = true;
         }
 
