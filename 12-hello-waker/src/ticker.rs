@@ -12,6 +12,8 @@ use nrf52833_hal::rtc::RtcCompareReg;
 
 use fugit::{Instant, Duration};
 
+use rtt_target::rprintln;
+
 pub type TickInstant = Instant<u64, 1, 32_768>; // 32.768 kHz clock
 pub type TickDuration = Duration<u64, 1, 32_768>; // 32.768 kHz clock
 
@@ -95,7 +97,7 @@ impl Ticker {
 // Handle RTC0 interrupt
 fn RTC0() {
     let now = Ticker::now();
-    // rprintln!("RTC Triggered at {}", now.duration_since_epoch().to_millis());
+    rprintln!("RTC Triggered at {}", now.duration_since_epoch().to_millis());
 
     let mut next_deadline = None;
     critical_section::with(|cs| {
