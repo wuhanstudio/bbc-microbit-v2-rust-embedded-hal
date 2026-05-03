@@ -106,7 +106,7 @@ fn RTC0() {
 
         if rtc.is_event_triggered(RtcInterrupt::Compare0) {
             rtc.reset_event(RtcInterrupt::Compare0);
-                let timers = &mut *TIMERS.borrow_ref_mut(cs);
+            let timers = &mut *TIMERS.borrow_ref_mut(cs);
 
             let mut i = 0;
             while i < timers.len() {
