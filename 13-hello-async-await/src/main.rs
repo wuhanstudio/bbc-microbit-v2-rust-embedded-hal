@@ -94,7 +94,7 @@ async fn main(spawner: Spawner) {
     let c5 = gpio::Output::new(p.P0_30, gpio::Level::Low, gpio::OutputDrive::Standard);
     let cols = [c1, c2, c3, c4, c5];
 
-    spawner.spawn(task_1()).unwrap();
-    spawner.spawn(task_2()).unwrap();
-    spawner.spawn(task_led(rows, cols)).unwrap();
+    spawner.spawn(task_1().unwrap());
+    spawner.spawn(task_2().unwrap());
+    spawner.spawn(task_led(rows, cols).unwrap());
 }
